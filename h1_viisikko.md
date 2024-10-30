@@ -132,12 +132,11 @@ Koska olin edellisessä tehtävässä luonut helloworld2-tiedoston kyseiseen kan
 
 Koska olin jo aiemmin asentanut minionin, tuli minun enää asentaa master. Aloitin pakettilistan päivittämisellä `$ sudo apt-get update` ja salt-masterin asentamisella `$ sudo apt-get -y install salt-master`. Tämän jälkeen editoin minionin asetustiedostoa komennolla `$ sudoedit /etc/salt/minion` ja asetin masteriksi localhostin. Käynnistin minion-demonin uudestaan komennolla `$ sudo systemctl restart salt-minion.service`. Lopuksi vielä hyväksyin minionin avaimen komennolla `$ sudo salt-key -A`. Testasin vielä toimiiko master-minion yhteys komennolla `$ sudo salt '*' cmd.run 'whoami'`.
 
-![Master-minion]
+![Master-minion](h1_masterminion.png)
 
-Komento palautti käyttäjäni nimen, joten päättelin siis, että master-minion arkkitehtuuri oli onnistunut. Tehtävä valmistui 14:15.
+Komento palautti tietokoneen nimen, joten päättelin siis, että master-minion arkkitehtuuri oli onnistunut. Tehtävä valmistui 14:15.
 
-(Karvinen 2024)
-
+(Karvinen 2023)
 
 ## Lähteet
 
