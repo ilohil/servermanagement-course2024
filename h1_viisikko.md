@@ -64,7 +64,7 @@ Asensin Saltin virtuaalikoneeseen seuraavilla komennolla:
 
 Tämän jälkeen asensin salt-minionin komennolla `$ sudo apt-get -y install salt-minion`. Tämän jälkeen vielä tarkistin että Salt on asentunut.
 
-![Salt-versio](h1_saltversio.png)
+![Salt-versio](Kuvat/h1_saltversio.png)
 
 Kuten kuvassa näkyy Salt oli asentunut, ja sen versio oli 3007.1. Tämä tehtävä valmistui 13:10.
 
@@ -76,7 +76,7 @@ Kuten kuvassa näkyy Salt oli asentunut, ja sen versio oli 3007.1. Tämä tehtä
 
 Ajoin komennon `$ sudo salt-call --local -l info state.single pkg.installed micro`. 
 
-![PKG-komento](h1_micro.png)
+![PKG-komento](Kuvat/h1_micro.png)
 
 Kuvasta voidaan havaita, että komento asensi minulle Micro-tekstieditorin. Pkg-komennolla voidaan siis hallinnoida ohjelmia, ja vastaavasti voisin poistaa ohjelman vaihtamalla pgk.installed-komennon pkg.removed-komennoksi. 
 
@@ -84,11 +84,11 @@ Kuvasta voidaan havaita, että komento asensi minulle Micro-tekstieditorin. Pkg-
 
 Ajoin komennon `$ sudo salt-call --local -l info state.single file.managed /tmp/helloworld  contents="Hello world!"`.
 
-![File-komento](h1_file.png)
+![File-komento](Kuvat/h1_file.png)
 
 Komennolla loin tmp-hakemistoon uuden tiedoston helloworld, jonka sisällöksi tuli teksti Hello world!. Tarkistin vielä oliko tiedosto ilmestynyt.
 
-![Tarkistus](h1_helloworld.png)
+![Tarkistus](Kuvat/h1_helloworld.png)
 
 Lopuksi vielä poistin tiedoston komennolla `$ sudo salt-call --local -l info state.single file.absent /tmp/helloworld`.
 
@@ -96,7 +96,7 @@ Lopuksi vielä poistin tiedoston komennolla `$ sudo salt-call --local -l info st
 
 Seuraavaksi kokeilin käynnistää Apachea komennolla `$ sudo salt-call --local -l info state.single service.running apache2 enable=True`. Tämä palautti oletetusti epäonnistuneen tuloksen, sillä en ole asentanut Apachea virtuaalikoneeseen.
 
-![Service-komento](h1_service.png)
+![Service-komento](Kuvat/h1_service.png)
 
 Jos minulla olisi Apache, tämä komento olisi käynnistänyt sen. Vastaavasti taas olisin voinut sammuttaa Apachen komennolla service.dead.
 
@@ -104,7 +104,7 @@ Jos minulla olisi Apache, tämä komento olisi käynnistänyt sen. Vastaavasti t
 
 Kokeilin uuden käyttäjän luomista komennolla `$ sudo salt-call --local -l info state.single user.present ilona2`. Koska kyseistä käyttäjää ei ollut olemassa, loi se uuden käyttäjän. 
 
-![User-komento](h1_user.png)
+![User-komento](Kuvat/h1_user.png)
 
 Lopuksi poistin turhan käyttäjän komennolla `$ sudo salt-call --local -l info state.single user.absent ilona2`.
 
@@ -112,7 +112,7 @@ Lopuksi poistin turhan käyttäjän komennolla `$ sudo salt-call --local -l info
 
 Asetin komennoksi `$ sudo salt-call --local -l info state.single cmd.run 'touch /tmp/helloworld2' creates="/tmp/helloworld2"`. Cmd-komento ajaa siis Linuxin touch-komennon. 
 
-![Cmd-komento](h1_cmd.png)
+![Cmd-komento](Kuvat/h1_cmd.png)
 
 Tässä tapauksessa se siis loi tmp-hakemistoon helloworld2-tiedoston.
 
@@ -122,7 +122,7 @@ Tässä tapauksessa se siis loi tmp-hakemistoon helloworld2-tiedoston.
 
 Idempotenttia testatakseni ajoin komennon `$ sudo salt-call --local -l info state.single file.managed /tmp/helloworld2`.
 
-![Idempotentti](h1_idempotentti.png)
+![Idempotentti](Kuvat/h1_idempotentti.png)
 
 Koska olin edellisessä tehtävässä luonut helloworld2-tiedoston kyseiseen kansioon, mitään ei tapahtunut. Idempotentti tarkoittaa siis, että muutoksia ei tarvi tehdä suorittaakseen komennon. Tehtävä oli valmis 13:55.
 
@@ -132,7 +132,7 @@ Koska olin edellisessä tehtävässä luonut helloworld2-tiedoston kyseiseen kan
 
 Koska olin jo aiemmin asentanut minionin, tuli minun enää asentaa master. Aloitin pakettilistan päivittämisellä `$ sudo apt-get update` ja salt-masterin asentamisella `$ sudo apt-get -y install salt-master`. Tämän jälkeen editoin minionin asetustiedostoa komennolla `$ sudoedit /etc/salt/minion` ja asetin masteriksi localhostin. Käynnistin minion-demonin uudestaan komennolla `$ sudo systemctl restart salt-minion.service`. Lopuksi vielä hyväksyin minionin avaimen komennolla `$ sudo salt-key -A`. Testasin vielä toimiiko master-minion yhteys komennolla `$ sudo salt '*' cmd.run 'whoami'`.
 
-![Master-minion](h1_masterminion.png)
+![Master-minion](Kuvat/h1_masterminion.png)
 
 Komento palautti tietokoneen nimen, joten päättelin siis, että master-minion arkkitehtuuri oli onnistunut. Tehtävä valmistui 14:15.
 
