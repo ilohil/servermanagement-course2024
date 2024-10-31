@@ -141,6 +141,9 @@ Komento palautti tietokoneen nimen, joten päättelin siis, että master-minion 
 ## Lähteet
 
 Karvinen, T. 2024. Palvelinten Hallinta. Tero Karvisen verkkosivusto. Luettavissa: [https://terokarvinen.com/palvelinten-hallinta/](https://terokarvinen.com/palvelinten-hallinta/). Luettu 30.10.2024.
+
 Karvinen, T. 2023. Run Salt Command Locally. Tero Karvisen verkkosivusto. Luettavissa: [https://terokarvinen.com/2021/salt-run-command-locally/](https://terokarvinen.com/2021/salt-run-command-locally/). Luettu 30.10.2024.
+
 Karvinen, T. 2018. Salt Quickstart – Salt Stack Master and Slave on Ubuntu Linux. Tero Karvisen verkkosivusto. Luettavissa: [https://terokarvinen.com/2018/03/28/salt-quickstart-salt-stack-master-and-slave-on-ubuntu-linux/](https://terokarvinen.com/2018/03/28/salt-quickstart-salt-stack-master-and-slave-on-ubuntu-linux/). Luettu: 30.10.2024.
+
 Karvinen, T. 2006. Raportin kirjoittaminen. Tero Karvisen verkkosivusto. Luettavissa: [https://terokarvinen.com/2006/06/04/raportin-kirjoittaminen-4/](https://terokarvinen.com/2006/06/04/raportin-kirjoittaminen-4/). Luettu: 30.10.2024.
