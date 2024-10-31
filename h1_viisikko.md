@@ -124,7 +124,7 @@ Idempotenttia testatakseni ajoin komennon `$ sudo salt-call --local -l info stat
 
 ![Idempotentti](Kuvat/h1_idempotentti.png)
 
-Koska olin edellisessä tehtävässä luonut helloworld2-tiedoston kyseiseen kansioon, mitään ei tapahtunut. Idempotentti tarkoittaa siis, että muutoksia ei tarvi tehdä suorittaakseen komennon. Tehtävä oli valmis 13:55.
+Koska olin edellisessä tehtävässä luonut helloworld2-tiedoston kyseiseen kansioon, mitään ei tapahtunut. Idempotentti tarkoittaa siis, että komento kertoo että kyseinen tiedosto on oltava olemassa, ei sitä että se tulisi välttämättä luoda. Tämän takia mitään ei siis suoritettu, koska kyseinen tiedosto oli jo olemassa. Tehtävä oli valmis 13:55.
 
 (Karvinen 2024)
 
