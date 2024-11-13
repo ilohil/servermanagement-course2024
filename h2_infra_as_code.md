@@ -87,7 +87,7 @@ Muokkasin Vagrantifileä kuvan mukaisesti, eli nyt `vagrant up`-komennon pitäis
 
 ![Kahden koneen verkko](Kuvat/h2_kaksikonetta.png)
 
-Pingaus näytti onnisstuvan, joten tehtävä valmistui 5:40.
+Pingaus näytti onnistuvan, joten tehtävä valmistui 5:40.
 
 ### d) Herra-orja verkossa
 
