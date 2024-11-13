@@ -32,7 +32,7 @@ Tämän viikon tehtävissä tuli tiivistää viisi artikkelia sekä tehdä Vagra
 ### Salt Vagrant - automatically provision one master and two slaves
 
 - Moduuleita voi toistaa kaikilla orjatietokoneilla komennolla `$ sudo salt '*' state.apply {moduulin nimi}`.
-- Halutut moduulit voidaan tallentaa top.sls-tiedostoon /srv/salt kansion alle, jolloin 
+- Halutut moduulit halutuille ryhmille voidaan tallentaa top.sls-tiedostoon /srv/salt kansion alle, jolloin ne toistetaan automaattisesti ilman, että moduulin nimeä tarvii erikseen kertoa. Tällöin komennoksi riittää `$ sudo salt '*' state.apply`.
 
 (Karvinen 2023)
 
