@@ -185,7 +185,7 @@ Komento ajoi ensin hello-moduulin ja tämän jälkeen apache-moduulin, eli top.s
 
 ### i) Apache-bonustehtävä
 
-Loin ylemmissä jo tehtävissä Apache-moduulin ja näytin, että se palautti slave-tietokoneen osoitteesta hello world-weppisivun. Käytin tähän tehtävään [näitä ohjeita](https://terokarvinen.com/2018/apache-user-homepages-automatically-salt-package-file-service-example/?fromSearch=apache). Jäljellä oli siis kokeilla muokata etusivun sisältöä käyttäjän oikeuksin. Kirjauduin slave-virtuaalikoneelleni ja loin käyttäjän hakemistoon public_html-kansion, jonka sillä loin index.html-tiedoston kuvan mukaisesti. Tämän jälkeen kokeilin sivun näkymistä curl-komennolla.
+Loin ylemmissä jo tehtävissä Apache-moduulin ja näytin, että se palautti slave-tietokoneen osoitteesta hello world-weppisivun. Käytin tähän tehtävään [näitä ohjeita](https://terokarvinen.com/2018/apache-user-homepages-automatically-salt-package-file-service-example/?fromSearch=apache). Jäljellä oli siis kokeilla muokata etusivun sisältöä käyttäjän oikeuksin. Kirjauduin slave-virtuaalikoneelleni ja loin käyttäjän hakemistoon public_html-kansion, johon loin index.html-tiedoston kuvan mukaisesti. Tämän jälkeen kokeilin sivun näkymistä curl-komennolla.
 
 ![Apache etusivut](Kuvat/h2_etusivut.png)
 
