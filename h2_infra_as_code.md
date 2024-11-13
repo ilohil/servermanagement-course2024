@@ -31,7 +31,19 @@ Tämän viikon tehtävissä tuli tiivistää viisi artikkelia sekä tehdä Vagra
 
 ### Salt Vagrant - automatically provision one master and two slaves
 
+- Moduuleita voi toistaa kaikilla orjatietokoneilla komennolla `$ sudo salt '*' state.apply {moduulin nimi}`.
+- Halutut moduulit voidaan tallentaa top.sls-tiedostoon /srv/salt kansion alle, jolloin 
+
 (Karvinen 2023)
+
+### Salt overview
+
+- Salt käyttää YAML-kieltä.
+- YAML-kielessä data varastoidaan avain-arvo pareina ja avain erotetaan arvosta kaksoispisteellä. Isoilla ja pienillä kirjaimilla on merkitystä.
+- Tabin käyttö ei ole sallittua, vaan esimerkiksi ominaisuudet tai listat tulee sisentää välilyönneillä. Lohkojen vakiosisennyksenä käytetään tyypillisesti kahta välilyöntiä.
+- Kommentit alkavat #-merkillä.
+
+(Salt contributors s.a.)
 
 
 ## Lähteet
@@ -43,3 +55,5 @@ Karvinen, T. 2018. Salt Quickstart – Salt Stack Master and Slave on Ubuntu Lin
 Karvinen, T. 2023. Salt Vagrant - automatically provision one master and two slaves. Tero Karvisen verkkosivusto.  Luettavissa: [https://terokarvinen.com/2023/salt-vagrant/#infra-as-code---your-wishes-as-a-text-file](https://terokarvinen.com/2023/salt-vagrant/#infra-as-code---your-wishes-as-a-text-file). Luettu: 11.11.2024.
 
 Karvinen, T. 2021. Two Machine Virtual Network With Debian 11 Bullseye and Vagrant. Tero Karvisen verkkosivusto. Luettavissa: [https://terokarvinen.com/2021/two-machine-virtual-network-with-debian-11-bullseye-and-vagrant/](https://terokarvinen.com/2021/two-machine-virtual-network-with-debian-11-bullseye-and-vagrant/). Luettu: 11.11.2024.
+
+Salt Contributors. s.a. Salt overview. Salt user guide. Luettavissa: [https://docs.saltproject.io/salt/user-guide/en/latest/topics/overview.html#](https://docs.saltproject.io/salt/user-guide/en/latest/topics/overview.html#). Luettu: 13.11.2024.
