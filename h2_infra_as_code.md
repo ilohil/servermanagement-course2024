@@ -61,13 +61,14 @@ Komento palautti, ett채 minulla oli asennettuna Vagrantin versio 2.4.1. Teht채v�
 
 ### b) Linux Vagrant
 
-Tein virtuaalikoneille kansion palvelintenhallinta Windows-tietokoneeseeni. Alustin Vagrant-tiedoston Debian-virtuaalikoneen luontiin komennolla:
+Tein virtuaalikoneille kansion palvelintenhallinta Windows-tietokoneeseeni. Avasin kansion komentokehotteesssa ja alustin Vagrant-tiedoston Debian-virtuaalikoneen luontiin komennolla:
 
     vagrant init debian/bookworm64
 
-T채m채n j채lkeen loin virtuaalikoneen komennolla:
+T채m채n j채lkeen loin virtuaalikoneen komennolla ja loin yhteyden seuraavilla komennoilla:
 
     vagrant up
+    vagrant ssh
 
 
 ## L채hteet
