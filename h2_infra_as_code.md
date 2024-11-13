@@ -79,7 +79,7 @@ Tehtävä oli valmis 5:10.
 
 ### c) Kaksin kaunihimpi
 
-Aloitin tehtävän muokkaamalla viime tehtävässä luotua Vargantfileä. 
+Aloitin tehtävän muokkaamalla viime tehtävässä luotua Vargantfileä soveltaen [näitä ohjeita](https://terokarvinen.com/2021/two-machine-virtual-network-with-debian-11-bullseye-and-vagrant/).
 
 ![Vagrantfilen muokkaus](Kuvat/h2_vagrantfile.png)
 
