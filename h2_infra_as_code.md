@@ -65,10 +65,61 @@ Tein virtuaalikoneille kansion palvelintenhallinta Windows-tietokoneeseeni. Avas
 
     vagrant init debian/bookworm64
 
-Tämän jälkeen loin virtuaalikoneen komennolla ja loin yhteyden seuraavilla komennoilla:
+Tämän jälkeen loin virtuaalikoneen komennolla ja loin yhteyden virtuaalikoneeseen:
 
     vagrant up
     vagrant ssh
+
+![Vagrant yhdellä koneella](Kuvat/h2_vagrantkone.png)
+
+Tämän jälkeen huomasin olevani Vagrantin luomassa Debian Bookworm-virtuaalikoneessa. Poistuin virtuaalikoneelta ja tuhosin lopuksi luomani virtuaalikoneen:
+
+    exit
+    vagrant destroy
+
+Tehtävä oli valmis 5:10.
+
+### c) Kaksin kaunihimpi
+
+Aloitin tehtävän muokkaamalla viime tehtävässä luotua Vargantfileä. 
+
+![Vagrantfilen muokkaus](Kuvat/h2_vagrantfile.png)
+
+Muokkasin Vagrantifileä kuvan mukaisesti, eli nyt `vagrant up`-komennon pitäisi luoda master- ja slave-virtuaalikoneet. Seuraavaksi loin virtuaalikoneet, kirjauduin niille sekä kokeilin pingata niillä toisiaan alemman kuvan mukaisesti.
+
+![Kahden koneen verkko](Kuvat/h2_kaksikonetta.png)
+
+Pingaus näytti onnisstuvan, joten tehtävä valmistui 5:40.
+
+### d) Herra-orja verkossa
+
+Aloitin tehtävän kirjautumalla master-virtuaalikoneelleni. Yritin asentaa Saltin [viime tehtävästä](https://github.com/ilohil/servermanagement-course2024/blob/main/h1_viisikko.md#salt-asennus) tutulla tavalla, mutta huomasin ettei asennuksen verkko-osoite toiminut. Tutkailin asiaa [Salt:in asennusohjeista](https://docs.saltproject.io/salt/install-guide/en/latest/topics/install-by-operating-system/linux-deb.html), ja huomasinkin että Saltin asennusohjeet ja verkko-osoite on muuttunut sitten viimeviikon. Asensin Saltin seuraavilla komennoilla:
+
+    $ mkdir -p /etc/apt/keyrings
+    $ curl -fsSL https://packages.broadcom.com/artifactory/api/security/keypair/SaltProjectKey/public | sudo tee /etc/apt/keyrings/salt-archive-keyring.pgp
+    $ curl -fsSL https://github.com/saltstack/salt-install-guide/releases/latest/download/salt.sources | sudo tee /etc/apt/sources.list.d/salt.sources
+    $ sudo apt-get update
+    $ sudo apt-get -y dist-upgrade
+
+Tämän jälkeen asensin master-virtuaalikoneelle Salt-masterin:
+
+    $ sudo apt-get -y install salt-master
+
+Tämän jälkeen kirjauduin slave-virtuaalikoneelleni ja asensin saltin samoilla ohjeilla. Tämän jälkeen asensin Salt-minionin:
+
+    $ sudo apt-get -y install salt-minion
+
+Tämän jälkeen muokkasin /etc/salt/minion-tiedostoa ja asetin slave-virtuaalikoneen masteriksi master-virtuaalikoneeni IP-osoitteen. Tämän jälkeen vielä käynnistin Salt-Minionin uudestaan:
+
+    $ sudo systemctl restart salt-minion.service
+
+Seuraavaksi kirjauduin slave-virtuaalikoneelta ulos ja siirryin takaisin master-virtuaalikoneelleni. Hyväksyin slave-virtuaalikoneen avaimen ja kokeilin minionin toimintaa komennolla:
+
+    $ sudo salt '*' cmd.run 'whoami'
+
+![Herra-orja arkkitehtuuri](Kuvat/h2_herraorja.png)
+
+Kuten kuvasta näkyy slave-virtuaalikone vastasi master-virtuaalikoneen komentoon. Tehtävä oli valmis 6:50.
 
 
 ## Lähteet
@@ -80,5 +131,7 @@ Karvinen, T. 2018. Salt Quickstart – Salt Stack Master and Slave on Ubuntu Lin
 Karvinen, T. 2023. Salt Vagrant - automatically provision one master and two slaves. Tero Karvisen verkkosivusto.  Luettavissa: [https://terokarvinen.com/2023/salt-vagrant/#infra-as-code---your-wishes-as-a-text-file](https://terokarvinen.com/2023/salt-vagrant/#infra-as-code---your-wishes-as-a-text-file). Luettu: 11.11.2024.
 
 Karvinen, T. 2021. Two Machine Virtual Network With Debian 11 Bullseye and Vagrant. Tero Karvisen verkkosivusto. Luettavissa: [https://terokarvinen.com/2021/two-machine-virtual-network-with-debian-11-bullseye-and-vagrant/](https://terokarvinen.com/2021/two-machine-virtual-network-with-debian-11-bullseye-and-vagrant/). Luettu: 11.11.2024.
+
+Salt Contributors. s.a. Install Salt DEBs. Salt install guide. Luettavissa: [https://docs.saltproject.io/salt/install-guide/en/latest/topics/install-by-operating-system/linux-deb.html](https://docs.saltproject.io/salt/install-guide/en/latest/topics/install-by-operating-system/linux-deb.html). Luettu: 13.11.2024.
 
 Salt Contributors. s.a. Salt overview. Salt user guide. Luettavissa: [https://docs.saltproject.io/salt/user-guide/en/latest/topics/overview.html#](https://docs.saltproject.io/salt/user-guide/en/latest/topics/overview.html#). Luettu: 13.11.2024.
