@@ -53,8 +53,6 @@ Kello oli 5:03 kun aloitin tehtävät.
 
 Minulla oli Virtualbox ja Vagrant jo valmiiksi asennettuna. Osoitin seuraavalla komennolla, että Vagrant on asennettu:
 
-    vagrant --version
-
 ![Vagrant-versio](Kuvat/h2_vagrantversio.png)
 
 Komento palautti, että minulla oli asennettuna Vagrantin versio 2.4.1. Tehtävä oli valmis 5:05.
