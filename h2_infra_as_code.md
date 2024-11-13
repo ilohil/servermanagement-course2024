@@ -177,8 +177,6 @@ Kirjauduin master-virtuaalikoneelleni. Loin top.sls-tiedoston /srv/salt/-hakemis
 
 Kirjoitin tiedoston sisällön kuvan mukaisesti, eli sen pitäisi ajaa hello- sekä apache-moduulit. Kokeilin moduulien ajamista orjalla:
 
-    $ sudo salt '*' state.apply
-
 ![Tops.sls-ajo](Kuvat/h2_topajo.png)
 
 Komento ajoi ensin hello-moduulin ja tämän jälkeen apache-moduulin, eli top.sls-tiedosto toimi odotetusti. Tehtävä oli valmis 8:14.
