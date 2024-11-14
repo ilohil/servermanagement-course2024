@@ -102,7 +102,7 @@ Aloitin tehtävän kirjautumalla master-virtuaalikoneelleni. Yritin asentaa Salt
 Tämän jälkeen asensin master-virtuaalikoneelle Salt-masterin:
 
     $ sudo apt-get -y install salt-master
-    $ sudo systemctl start salt-master
+    $ sudo systemctl enable salt-master && sudo systemctl start salt-master
 
 Tämän jälkeen kirjauduin slave-virtuaalikoneelleni ja asensin saltin samoilla ohjeilla. Tämän jälkeen asensin Salt-minionin:
 
