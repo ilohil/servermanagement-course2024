@@ -2,6 +2,23 @@
 
 ## Tiivistelmät
 
+### Pkg-File-Service – Control Daemons with Salt – Change SSH Server Port
+
+- Tyypillisesti tiedostonhallintajärjestelmän konfigurointi menee seuraavasti; asennetaan ohjelma, ylikirjoitetaan konfiguraatiotiedosto ja käynnistetään demoni uudelleen.
+- SSH-moduulissa asennetaan ensin openssh-server pkg.installed-komennolla, sitten muokataan tiedostoa /etc/ssh/sshd_config ja käynnistetään SSH uudelleen.
+- Moduulin voi ajaa kaikilla orjilla komennolla `$ sudo salt '*' state.apply sshd`.
+- Moduulin toimintaa voi testata komennolla `$ nc -vz {osoite} {portin numero}` tai `$ ssh -p {portin numero} {käyttäjä}@{osoite}`
+
+(Karvinen 2018)
+
+### Saltin tilaohjeet
+
+- Saltilla ohjelmia voi asentaa komennolla pkg.installed. Ohjelmia voi poistaa komennolla pkg.purged. Useampaan ohjelmaan voi viitata komennolla pkgs.
+- Tiedostoja voi hallita komennolla file.managed, jolloin tiedosto ylikirjoitetaan jos se on jo olemassa. Tiedostoille voi myös antaa  parametreiksi esimerkiksi tiedoston ommistajan. File.absent komennolla voi poistaa tiedostoja. File.symlink komennolla voi luoda symbolisen linkin, joka viittaa toiseen tiedostoon tai kansioon.
+- Service.running komennolla voi käynnistää demoneja, ja enable-parametrilla ne voidaan asettaa käynnistymään tietokoneen käynnistyessä. Service.dead komennolla voidaan sammuttaa demoneja.
+
+(Salt project s.a.)
+
 ## Tehtävät
 
 Aloitin tehtävät 22:24. 
@@ -65,7 +82,7 @@ Tässä tehtävässä tuli lisätä uusi portti, jota SSH kuuntelee. Aloitin teh
 Tämän jälkeen lisäsin portin 1234 SSH-asetustiedostoon ja käynnistin SSH-serverin uudelleen: 
 
     $ sudoedit /etc/ssh/sshd_config
-    $ sudo systemctl restart ssh
+    $ sudo systemctl restart sshd
 
 Tämän jälkeen tarkistin, että portti 1234 on avoinna ja SSH-server on käynnissä.
 
@@ -118,6 +135,10 @@ Muutoksia ei tapahtunut, joten moduuli oli idempotentti. Lopuksi vielä tarkisti
 ![Sshd-moduulin tulosten testaus](Kuvat/h3_sshtesti2.png)
 
 Kuvan mukaisesti portti 1234 oli auki ja SSH-serveri käynnissä, ja täten moduuli toimi toivotusti. Kello oli 00:21, kun sain tehtävän päätökseen.
+
+### c) Oma moduli
+
+Tässä tehtävässä tuli kertoa omasta moduulistaan, joka on myös kurssin lopputyö. Tällä hetkellä minulla on suunnitelmissa tehdä watchlist-tyyppinen tietokanta sarjoille ja elokuville. Tietokanta itsessään on melko simppeli, ja sisältää vain elokuvia tai sarjoja, arvosteluja ja tiedon siitä onko se katsottu vai katsomatta. Aion kuitenkin toteuttaa tietokannan hallinnan moduuleilla alusta loppuun. En osaa vielä tarkalleen sanoa mitä moduuleja tarvitsen tietokannan hallintaan, mutta luulen, että asia selviää sitten kun lähden tekemään tehtävää.
 
 ### d) VirtualHost
 
@@ -218,7 +239,7 @@ Tämän jälkeen vielä kokeilin muokata index.html-tiedostoa ilman sudoa.
 
 ![Kotisivun muokkaus](Kuvat/h3_apachemoduuli7.png)
     
-Käyttäjä pystyi muokkaamaan kotisivua omassa hakemistossaan ja kotisivun näkymä vaihtui localhostissa, eli moduuli toimi odotetusti. Kello oli 1:55 kun sain tehtävän valmiiksi.
+Käyttäjä pystyi muokkaamaan kotisivua omassa hakemistossaan ja kotisivun näkymä vaihtui localhostissa, eli moduuli toimi odotetusti. Kello oli 1:55 kun sain tehtävät valmiiksi.
 
 # Lähteet
 
@@ -227,3 +248,11 @@ Karvinen, T. 2018. Apache User Homepages Automatically – Salt Package-File-Ser
 Karvinen, T. 2018. Name Based Virtual Hosts on Apache – Multiple Websites to Single IP Address. Tero Karvisen verkkosivusto. Luettavissa: [https://terokarvinen.com/2018/04/10/name-based-virtual-hosts-on-apache-multiple-websites-to-single-ip-address/?fromSearch=apache](https://terokarvinen.com/2018/04/10/name-based-virtual-hosts-on-apache-multiple-websites-to-single-ip-address/?fromSearch=apache). Luettu: 24.11.2024.
 
 Karvinen, T. 2018. Pkg-File-Service – Control Daemons with Salt – Change SSH Server Port. Tero Karvisen verkkosivusto. Luettavissa: [https://terokarvinen.com/2018/pkg-file-service-control-daemons-with-salt-change-ssh-server-port/?fromSearch=ssh](https://terokarvinen.com/2018/pkg-file-service-control-daemons-with-salt-change-ssh-server-port/?fromSearch=ssh). Luettu: 24.11.2024.
+
+Salt Project. s.a. salt.states.file. Salt project. Luettavissa: [https://docs.saltproject.io/en/latest/ref/states/all/salt.states.pkg.html](https://docs.saltproject.io/en/latest/ref/states/all/salt.states.file.html) Luettu: 25.11.2024.
+
+Salt Project. s.a. salt.states.pkg. Salt project. Luettavissa: [https://docs.saltproject.io/en/latest/ref/states/all/salt.states.pkg.html](https://docs.saltproject.io/en/latest/ref/states/all/salt.states.pkg.html) Luettu: 25.11.2024.
+
+Salt Project. s.a. salt.states.service. Salt project. Luettavissa: [https://docs.saltproject.io/en/latest/ref/states/all/salt.states.service.html](https://docs.saltproject.io/en/latest/ref/states/all/salt.states.service.html) Luettu: 25.11.2024.
+
+
