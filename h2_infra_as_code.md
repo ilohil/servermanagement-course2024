@@ -53,15 +53,13 @@ Kello oli 5:03 kun aloitin tehtävät.
 
 Minulla oli Virtualbox ja Vagrant jo valmiiksi asennettuna. Osoitin seuraavalla komennolla, että Vagrant on asennettu:
 
-    vagrant --version
-
 ![Vagrant-versio](Kuvat/h2_vagrantversio.png)
 
 Komento palautti, että minulla oli asennettuna Vagrantin versio 2.4.1. Tehtävä oli valmis 5:05.
 
 ### b) Linux Vagrant
 
-Tein virtuaalikoneille kansion palvelintenhallinta Windows-tietokoneeseeni. Avasin kansion komentokehotteesssa ja alustin Vagrant-tiedoston Debian-virtuaalikoneen luontiin komennolla:
+Tein virtuaalikoneille kansion palvelintenhallinta Windows-tietokoneeseeni. Avasin kansion komentokehotteessa ja alustin Vagrant-tiedoston Debian-virtuaalikoneen luontiin komennolla:
 
     vagrant init debian/bookworm64
 
@@ -81,7 +79,7 @@ Tehtävä oli valmis 5:10.
 
 ### c) Kaksin kaunihimpi
 
-Aloitin tehtävän muokkaamalla viime tehtävässä luotua Vargantfileä. 
+Aloitin tehtävän muokkaamalla viime tehtävässä luotua Vagrantfileä soveltaen [näitä ohjeita](https://terokarvinen.com/2021/two-machine-virtual-network-with-debian-11-bullseye-and-vagrant/).
 
 ![Vagrantfilen muokkaus](Kuvat/h2_vagrantfile.png)
 
@@ -89,7 +87,7 @@ Muokkasin Vagrantifileä kuvan mukaisesti, eli nyt `vagrant up`-komennon pitäis
 
 ![Kahden koneen verkko](Kuvat/h2_kaksikonetta.png)
 
-Pingaus näytti onnisstuvan, joten tehtävä valmistui 5:40.
+Pingaus näytti onnistuvan, joten tehtävä valmistui 5:40.
 
 ### d) Herra-orja verkossa
 
@@ -104,6 +102,7 @@ Aloitin tehtävän kirjautumalla master-virtuaalikoneelleni. Yritin asentaa Salt
 Tämän jälkeen asensin master-virtuaalikoneelle Salt-masterin:
 
     $ sudo apt-get -y install salt-master
+    $ sudo systemctl enable salt-master && sudo systemctl start salt-master
 
 Tämän jälkeen kirjauduin slave-virtuaalikoneelleni ja asensin saltin samoilla ohjeilla. Tämän jälkeen asensin Salt-minionin:
 
@@ -179,15 +178,13 @@ Kirjauduin master-virtuaalikoneelleni. Loin top.sls-tiedoston /srv/salt/-hakemis
 
 Kirjoitin tiedoston sisällön kuvan mukaisesti, eli sen pitäisi ajaa hello- sekä apache-moduulit. Kokeilin moduulien ajamista orjalla:
 
-    $ sudo salt '*' state.apply
-
 ![Tops.sls-ajo](Kuvat/h2_topajo.png)
 
 Komento ajoi ensin hello-moduulin ja tämän jälkeen apache-moduulin, eli top.sls-tiedosto toimi odotetusti. Tehtävä oli valmis 8:14.
 
 ### i) Apache-bonustehtävä
 
-Loin ylemmissä jo tehtävissä Apache-moduulin ja näytin, että se palautti slave-tietokoneen osoitteesta hello world-weppisivun. Käytin tähän tehtäväänt [näitä ohjeita](https://terokarvinen.com/2018/apache-user-homepages-automatically-salt-package-file-service-example/?fromSearch=apache). Jäljellä oli siis kokeilla muokata etusivun sisältöä käyttäjän oikeuksin. Kirjauduin slave-virtuaalikoneelleni ja loin käyttäjän hakemistoon public_html-kansion, jonka sillä loin index.html-tiedoston kuvan mukaisesti. Tämän jälkeen kokeilin sivun näkymistä curl-komennolla.
+Loin jo ylemmissä tehtävissä Apache-moduulin ja näytin, että se palautti slave-tietokoneen osoitteesta hello world-weppisivun. Käytin tähän tehtävään [näitä ohjeita](https://terokarvinen.com/2018/apache-user-homepages-automatically-salt-package-file-service-example/?fromSearch=apache). Jäljellä oli siis kokeilla muokata etusivun sisältöä käyttäjän oikeuksin. Kirjauduin slave-virtuaalikoneelleni ja loin käyttäjän hakemistoon public_html-kansion, johon loin index.html-tiedoston kuvan mukaisesti. Tämän jälkeen kokeilin sivun näkymistä curl-komennolla.
 
 ![Apache etusivut](Kuvat/h2_etusivut.png)
 
