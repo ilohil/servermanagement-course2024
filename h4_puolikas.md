@@ -2,6 +2,22 @@
 
 Tämän viikon tehtävissä tuli lähteä työstämään omaa Salt-moduulia. Olin valinnut aiheekseni tietokannan hallinnan moduuleilla. Tietokantaan on tarkoitus tallentaa suosikkisarjoja sekä -elokuvia. Lähdin suorittamaan tehtävää pohtimalla erilaisia tietokantavaihtoehtoja, ja lopulta päädyin valitsemaan MariaDB:n. Valitsin kyseisen tietokannan siksi, että se on kevyempi ja tarjoaa riittävät toiminnot elokuvien ja sarjojen tallentamiseen. Halusin myös, että työn pääpaino on moduulien hallinnassa, jolloin mielestäni esimerkiksi PostgreSQL:n tarjoamat monimutkaisemmat tietokantakonfiguraatiot eivät tuo lisäarvoa työhön. (Amazon Web Services s.a.)
 
+### Käyttöympäristö
+
+Tietokone: Itse kasattu pöytätietokone
+
+Emolevy: PRIME Z390-P
+
+Prosessori: 3,70 GHz Intel Core i5-9600k
+
+Keskusmuisti: 16 GB 3200MHz DDR4
+
+Näytönohjain: Radeon RX 5600 XT Pulse 6GB GDDR6
+
+Tallennustilat: C:/ 500 GB SSD M.2, D:/ 1000 GB SSD M.2
+
+Käyttöjärjestelmä: Windows 11 Home 64-bit
+
 ## MariaDB:n manuaalinen asennus ja hallinta
 
 Päätin ensimmäisenä kokeilla MariaDB:n asennusta käsin. Aloitin tehtävät kello 10:48. Käytin tehtävässä [näitä ohjeita](https://terokarvinen.com/2018/install-mariadb-on-ubuntu-18-04-database-management-system-the-new-mysql/?fromSearch=database). Käytin tehtävän tekoon master-virtuaalikonetta, jossa on Linux Debian Bookworm-käyttöjärjestelmä. Ensimmäisenä päivitin pakettilistan ja asensin päivitykset.
