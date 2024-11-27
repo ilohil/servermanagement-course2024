@@ -87,7 +87,7 @@ Init.sls-tiedoston sisältö:
   
     mariadb-service:
       service.running:
-        - name: mysql
+        - name: mariadb
         - enable: True
     
     set-root-password:
