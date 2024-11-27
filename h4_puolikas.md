@@ -132,7 +132,7 @@ Tällä kertaa käyttäjien luominen ja testitietokannan poisto epäonnistuivat.
           - mariadb-server
           - python3-pymysql
 
-Kokeilin taas ajoa paikallisesti uudestaan. Sain vieläkin saman virheen. Valitettavasti en enää ehtinyt saada virheitä ratkottua palautuksen aikarajan puitteissa, joten ongelma jää vielä ratkaisematta. Nyt kuitenkin sain aikaiseksi alun moduulille, ja mariaDB:n asennus ainakin onnistuu.
+Kokeilin taas ajoa paikallisesti uudestaan. Sain vieläkin saman virheen. Valitettavasti en enää ehtinyt saada virheitä ratkottua palautuksen aikarajan puitteissa, joten ongelma jää vielä ratkaisematta. Ongelma kuitenkin on käsitykseni mukaan jossain Saltin ja Saltin tarjoamien mysql-toimintojen yhteyksissä. Nyt kuitenkin sain aikaiseksi alun moduulille, ja mariaDB:n asennus ainakin onnistuu.
 
 
 # Lähteet
