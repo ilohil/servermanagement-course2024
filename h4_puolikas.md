@@ -72,7 +72,7 @@ Jäin kuitenkin pohtimaan, että onko tämä tietoturvallinen ratkaisu, sillä s
 
 ## MariaDB:n asennus moduulilla
 
-Poistin virtuaalikoneelta kaikki viime tehtävässä tekemäni asennukset ja tiedostot. Aloitin tehtävät 12:30. Käytin apuna tässä tehtävässä [tätä github-repositoriota](https://github.com/GeoffMontee/mariadb-saltstack-formula) ja Saltin dokumentaatiota [käyttäjistä](https://docs.saltproject.io/en/latest/ref/states/all/salt.states.mysql_user.html) ja [pillarista](https://docs.saltproject.io/en/latest/ref/pillar/all/salt.pillar.mysql.html). Ensimmäiseksi loin mariadb-moduulin ja sille init.sls-tiedoston: 
+Poistin virtuaalikoneelta kaikki viime tehtävässä tekemäni asennukset ja tiedostot. Aloitin tehtävät 12:30. Käytin apuna tässä tehtävässä [tätä github-repositoriota](https://github.com/GeoffMontee/mariadb-saltstack-formula) ja Saltin dokumentaatiota [SQL-käyttäjistä](https://docs.saltproject.io/en/latest/ref/states/all/salt.states.mysql_user.html). Ensimmäiseksi loin mariadb-moduulin ja sille init.sls-tiedoston: 
 
     $ sudo mkdir -p /srv/salt/mariadb/
     $ sudoedit /srv/salt/mariadb/init.sls
