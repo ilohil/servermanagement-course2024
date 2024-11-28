@@ -1,6 +1,3 @@
-githubtesti
-
-
 # H1 Viisikko
 
 Tämän viikon tehtävissä tuli tiivistää kolme artikkelia sekä asentaa Debian 12 Bookworm-virtuaalikoneeseen. Tälle luodulle virtuaalikoneelle tuli asentaa Salt, josta tuli tutkia tilafunktioita, idempotenttia ja herra-orja arkkitehtuuria.
