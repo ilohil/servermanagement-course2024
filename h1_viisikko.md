@@ -35,6 +35,22 @@ Tämän viikon tehtävissä tuli tiivistää kolme artikkelia sekä asentaa Debi
 
 (Karvinen 2006)
 
+### Käyttöympäristö
+
+Tietokone: Itse kasattu pöytätietokone
+
+Emolevy: PRIME Z390-P
+
+Prosessori: 3,70 GHz Intel Core i5-9600k
+
+Keskusmuisti: 16 GB 3200MHz DDR4
+
+Näytönohjain: Radeon RX 5600 XT Pulse 6GB GDDR6
+
+Tallennustilat: C:/ 500 GB SSD M.2, D:/ 1000 GB SSD M.2
+
+Käyttöjärjestelmä: Windows 11 Home 64-bit
+
 ## Tehtävät
 
 Kello oli 12.15 kun aloitin tehtävät. 

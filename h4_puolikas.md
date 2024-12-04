@@ -2,6 +2,22 @@
 
 Tämän viikon tehtävissä tuli lähteä työstämään omaa Salt-moduulia. Olin valinnut aiheekseni tietokannan hallinnan moduuleilla. Tietokantaan on tarkoitus tallentaa suosikkisarjoja sekä -elokuvia. Lähdin suorittamaan tehtävää pohtimalla erilaisia tietokantavaihtoehtoja, ja lopulta päädyin valitsemaan MariaDB:n. Valitsin kyseisen tietokannan siksi, että se on kevyempi ja tarjoaa riittävät toiminnot elokuvien ja sarjojen tallentamiseen. Halusin myös, että työn pääpaino on moduulien hallinnassa, jolloin mielestäni esimerkiksi PostgreSQL:n tarjoamat monimutkaisemmat tietokantakonfiguraatiot eivät tuo lisäarvoa työhön. (Amazon Web Services s.a.)
 
+### Käyttöympäristö
+
+Tietokone: Itse kasattu pöytätietokone
+
+Emolevy: PRIME Z390-P
+
+Prosessori: 3,70 GHz Intel Core i5-9600k
+
+Keskusmuisti: 16 GB 3200MHz DDR4
+
+Näytönohjain: Radeon RX 5600 XT Pulse 6GB GDDR6
+
+Tallennustilat: C:/ 500 GB SSD M.2, D:/ 1000 GB SSD M.2
+
+Käyttöjärjestelmä: Windows 11 Home 64-bit
+
 ## MariaDB:n manuaalinen asennus ja hallinta
 
 Päätin ensimmäisenä kokeilla MariaDB:n asennusta käsin. Aloitin tehtävät kello 10:48. Käytin tehtävässä [näitä ohjeita](https://terokarvinen.com/2018/install-mariadb-on-ubuntu-18-04-database-management-system-the-new-mysql/?fromSearch=database). Käytin tehtävän tekoon master-virtuaalikonetta, jossa on Linux Debian Bookworm-käyttöjärjestelmä. Ensimmäisenä päivitin pakettilistan ja asensin päivitykset.
@@ -72,7 +88,7 @@ Jäin kuitenkin pohtimaan, että onko tämä tietoturvallinen ratkaisu, sillä s
 
 ## MariaDB:n asennus moduulilla
 
-Poistin virtuaalikoneelta kaikki viime tehtävässä tekemäni asennukset ja tiedostot. Aloitin tehtävät 12:30. Käytin apuna tässä tehtävässä [tätä github-repositoriota](https://github.com/GeoffMontee/mariadb-saltstack-formula) ja Saltin dokumentaatiota [käyttäjistä](https://docs.saltproject.io/en/latest/ref/states/all/salt.states.mysql_user.html) ja [pillarista](https://docs.saltproject.io/en/latest/ref/pillar/all/salt.pillar.mysql.html). Ensimmäiseksi loin mariadb-moduulin ja sille init.sls-tiedoston: 
+Poistin virtuaalikoneelta kaikki viime tehtävässä tekemäni asennukset ja tiedostot. Aloitin tehtävät 12:30. Käytin apuna tässä tehtävässä [tätä github-repositoriota](https://github.com/GeoffMontee/mariadb-saltstack-formula) ja Saltin dokumentaatiota [SQL-käyttäjistä](https://docs.saltproject.io/en/latest/ref/states/all/salt.states.mysql_user.html). Ensimmäiseksi loin mariadb-moduulin ja sille init.sls-tiedoston: 
 
     $ sudo mkdir -p /srv/salt/mariadb/
     $ sudoedit /srv/salt/mariadb/init.sls
@@ -87,7 +103,7 @@ Init.sls-tiedoston sisältö:
   
     mariadb-service:
       service.running:
-        - name: mysql
+        - name: mariadb
         - enable: True
     
     set-root-password:
@@ -132,7 +148,7 @@ Tällä kertaa käyttäjien luominen ja testitietokannan poisto epäonnistuivat.
           - mariadb-server
           - python3-pymysql
 
-Kokeilin taas ajoa paikallisesti uudestaan. Sain vieläkin saman virheen. Valitettavasti en enää ehtinyt saada virheitä ratkottua palautuksen aikarajan puitteissa, joten ongelma jää vielä ratkaisematta. Nyt kuitenkin sain aikaiseksi alun moduulille, ja mariaDB:n asennus ainakin onnistuu.
+Kokeilin taas ajoa paikallisesti uudestaan. Sain vieläkin saman virheen. Valitettavasti en enää ehtinyt saada virheitä ratkottua palautuksen aikarajan puitteissa, joten ongelma jää vielä ratkaisematta. Ongelma kuitenkin on käsitykseni mukaan jossain Saltin ja Saltin tarjoamien mysql-toimintojen yhteyksissä. Nyt kuitenkin sain aikaiseksi alun moduulille, ja mariaDB:n asennus ainakin onnistuu.
 
 
 # Lähteet
