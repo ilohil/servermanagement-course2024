@@ -124,7 +124,7 @@ Tiedostoa ei löydetty, ja päättelin ettei sitä löydetä Salt:in kansioista 
 
 Moduulin ajamisen päättyi jatkuvasti prosessin tappamiseen. Tarkistin lokit, ja huomasin että sain jatkuvasti OOM-virheitä. Poistin koko virtuaalikoneen ja aloitin uudelleen. Uusi virtuaalikone antoi myös samaa virhettä, jo heti alussa päivittäessäni paketteja. Viimeisenä oljenkortena kokeilin siirtyä slave-virtuaalikoneelle. Sillä pääsin moduulin suorittamiseen asti, mutta sen jälkeen tuli sama virhe yhä uudelleen. Virheet estävät moduulien suorittamisen, joten minun täytyy konsultoida kurssin opettajaa ennen, kuin voin jatkaa lopputyötä.
 
-Sain opettajalta katsoa [tätä sivua](https://developer.hashicorp.com/vagrant/docs/providers/virtualbox/configuration#vboxmanage-customizations) Vagrantin asennustiedoston konfigurointiin. Lisäsin asennustiedostoon seuraavan rivin:
+Sain opettajalta vinkin katsoa [tätä sivua](https://developer.hashicorp.com/vagrant/docs/providers/virtualbox/configuration#vboxmanage-customizations) Vagrantin asennustiedoston konfigurointiin. Lisäsin asennustiedostoon seuraavan rivin:
 
     config.vm.provider "virtualbox" do |v|
         v.memory = 2048
