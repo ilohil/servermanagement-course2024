@@ -73,11 +73,6 @@ Tilatiedoston sisältö:
         - name: "mariadb-admin -u root password '{{ root_password }}'"
         - unless: "mariadb-admin -u root -e 'SELECT 1'"
     
-    remove_test_database:
-      cmd.run:
-        - name: "mariadb -u root -p'{{ root_password }}' -e 'DROP DATABASE IF EXISTS test;'"
-        - unless: "mariadb -u root -p'{{ root_password }}' -e 'SHOW DATABASES LIKE \"test\";'"
-    
     remove_anonymous_users:
       cmd.run:
         - name: "mariadb -u root -p'{{ root_password }}' -e 'DELETE FROM mysql.user WHERE User=\"\";'"
@@ -127,7 +122,80 @@ Tiedostoa ei löydetty, ja päättelin ettei sitä löydetä Salt:in kansioista 
 
 ![Oom-lokit](Kuvat/h5_muistiloppu3.png)
 
-Moduulin ajamisen päättyi jatkuvasti prosessin tappamiseen. Tarkistin lokit, ja huomasin että sain jatkuvasti OOM-virheitä. Poistin koko virtuaalikoneen ja asetin Vagrantin asennustiedostoon enemmän muistia. Uusi virtuaalikone antoi myös samaa virhettä, jo heti alussa päivittäessäni paketteja. Viimeisenä oljenkortena kokeilin siirtyä slave-virtuaalikoneelle. Sillä pääsin moduulin suorittamiseen asti, mutta sen jälkeen tuli sama virhe yhä uudelleen. Virheet estävät moduulien suorittamisen, joten minun täytyy konsultoida kurssin opettajaa ennen, kuin voin jatkaa lopputyötä.
+Moduulin ajamisen päättyi jatkuvasti prosessin tappamiseen. Tarkistin lokit, ja huomasin että sain jatkuvasti OOM-virheitä. Poistin koko virtuaalikoneen ja aloitin uudelleen. Uusi virtuaalikone antoi myös samaa virhettä, jo heti alussa päivittäessäni paketteja. Viimeisenä oljenkortena kokeilin siirtyä slave-virtuaalikoneelle. Sillä pääsin moduulin suorittamiseen asti, mutta sen jälkeen tuli sama virhe yhä uudelleen. Virheet estävät moduulien suorittamisen, joten minun täytyy konsultoida kurssin opettajaa ennen, kuin voin jatkaa lopputyötä.
+
+Sain opettajalta katsoa [tätä sivua](https://developer.hashicorp.com/vagrant/docs/providers/virtualbox/configuration#vboxmanage-customizations) Vagrantin asennustiedoston konfigurointiin. Lisäsin asennustiedostoon seuraavan rivin:
+
+    config.vm.provider "virtualbox" do |v|
+        v.memory = 2048
+      end
+
+Seuraavaksi poistin virtuaalikoneet ja alustin ne uudestaan. Nyt virtuaalikoneet toimivat. Jatkoin mihin jäin, eli muokkasin configure_mariadb.sls-tilatiedostoa.
+
+    {% set root_password = 'rootin_salasana' %}
+    {% set user_password = 'kayttajan_salasana' %}
+    
+    admin:
+      user.present
+    
+    set_root_password:
+      cmd.run:
+        - name: mariadb-admin -u root password '{{ root_password }}'
+        - unless: mariadb -u root -e 'SELECT 1'
+    
+    remove_test_database:
+      cmd.run:
+        - name: mariadb -u root -p'{{ root_password }}' -e "DROP DATABASE IF EXISTS test;"
+        - onlyif: mariadb -u root -p'{{ root_password }}' -e "SHOW DATABASES LIKE 'test'" | grep -q '^test$'
+    
+    create_user:
+      cmd.run:
+        - name: mariadb -u root -p'{{ root_password }}' -e "CREATE USER IF NOT EXISTS 'admin'@'localhost' IDENTIFIED BY '{{ user_password }}';"
+        - unless: mariadb -u root -p'{{ root_password }}' -e "SELECT User FROM mysql.user WHERE User='admin';"
+    
+    create_database:
+      cmd.run:
+        - name: mariadb -u root -p'{{ root_password }}' -e "CREATE DATABASE IF NOT EXISTS watchlistdb"
+        - unless: mariadb -u root -p'{{ root_password }}' -e "SHOW DATABASES LIKE 'watchlistdb';"
+    
+    grant_priviledges:
+      cmd.run:
+        - name: mariadb -u root -p'{{ root_password }}' -e "GRANT ALL PRIVILEGES ON watchlistdb.* TO 'admin'@'localhost'; FLUSH PRIVILEGES;"
+        - unless: mariadb -u root -p'{{ root_password }}' -e "SHOW GRANTS FOR 'admin'@'localhost'" | grep -i "watchlistdb"
+    
+    /home/admin/mariadb:
+      file.directory:
+        - user: admin
+        - group: admin
+    
+    /home/admin/mariadb/create_table.sql:
+      file.managed:
+        - source: salt://mariadb/create_table.sql
+        - user: admin
+        - group: admin
+    
+    create_table:
+      cmd.run:
+        - name: mariadb -u admin -p'{{ user_password }}' < /home/admin/mariadb/create_table.sql
+        - unless: mariadb -u admin -p'{{ user_password }}' watchlistdb -e "SHOW TABLES LIKE 'watchlist'" | grep -q 'watchlist'
+
+Tiedoston sisältö muuttui siis siten, että lisäsin admin-käyttäjän ja sekä tallensin SQL-lauseen käyttäjän hakemistoon. Lisäksi korjasin paljon väärää syntaksia.  Ajoin taas moduulin paikallisesti.
+
+![Tietokantaa ei oltu asetettu taululle](Kuvat/h5_mariadb_virhe3.png)
+
+Muut moduulin osat toimivat, mutta sain virheen, että taululle ei oltu asetettu tietokantaa johon sen tulisi tallentua. Kävin siis lisäämässä create_table.sql-tiedoston alkuun käytettävän tietokannan ja kokeilin taas ajaa moduulin paikallisesti. 
+
+![Ajettu Mariadb-moduuli](Kuvat/h5_mariadb_onnistunutajo.png)
+
+Moduulin ajo onnistui. Kävin vielä tarkistamassa, että tietokanta on muuttunut. 
+
+![Tietokantaan tullet muutokset](Kuvat/h5_uusitietokanta.png)
+
+Watchlistdb-tietokanta oli ilmestynyt ja sille oli luotu taulu watchlist. Lisäksi käyttäjä oli luotu, sillä pystyin kirjautumaan sen tunnuksilla sisään. Viimeisenä tarkistin vielä, että moduuli on idempotentti ajamalla sen uudelleen.
+
+![Moduuli idempotentti](Kuvat/h5_moduuli_idempotentti.png)
+
+Muutoksia ei tapahtunut, joten ehdot toimivat oikein ja moduuli oli idempotentti.
 
 # Lähteet
 
