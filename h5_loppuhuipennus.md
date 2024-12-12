@@ -2,6 +2,8 @@
 
 Tämän viikon tehtävissä tuli tehdä viime viikkona aloitettu projekti loppuun. Olin valinnut siis aiheekseni MariaDB-tietokannan hallinnan Salt-moduuleilla. Viime viikon tunnilla (28.11.2024) Tero Karviselta saamieni ohjeiden mukaan muutin lähestymistapaani, ja nyt Salt:in tarjoaman mysql-moduulin sijasta aion käyttää komentokehotetta tietokannan alustukseen. 
 
+[Moduulin Github-repositorio](https://github.com/ilohil/watchlist-with-salt)
+
 ### Käyttöympäristö
 
 Tietokone: Itse kasattu pöytätietokone
@@ -132,16 +134,16 @@ Sain opettajalta vinkin katsoa [tätä sivua](https://developer.hashicorp.com/va
 
 Seuraavaksi poistin virtuaalikoneet ja alustin ne uudestaan. Nyt virtuaalikoneet toimivat. Jatkoin mihin jäin, eli muokkasin configure_mariadb.sls-tilatiedostoa.
 
-    {% set root_password = 'rootin_salasana' %}
-    {% set user_password = 'kayttajan_salasana' %}
+    {% set root_password = 'root' %}
+    {% set user_password = 'admin' %}
     
     admin:
       user.present
     
     set_root_password:
       cmd.run:
-        - name: mariadb-admin -u root password '{{ root_password }}'
-        - unless: mariadb -u root -e 'SELECT 1'
+        - name: mariadb -u root -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('{{ root_password }}')"
+        - unless: mariadb -u root -p'{{ root_password }}' -e "SELECT User FROM mysql.user WHERE User='root';" | grep -i "root"
     
     remove_test_database:
       cmd.run:
@@ -150,13 +152,13 @@ Seuraavaksi poistin virtuaalikoneet ja alustin ne uudestaan. Nyt virtuaalikoneet
     
     create_user:
       cmd.run:
-        - name: mariadb -u root -p'{{ root_password }}' -e "CREATE USER IF NOT EXISTS 'admin'@'localhost' IDENTIFIED BY '{{ user_password }}';"
-        - unless: mariadb -u root -p'{{ root_password }}' -e "SELECT User FROM mysql.user WHERE User='admin';"
+        - name: mariadb -u root -p'{{ root_password }}' -e "CREATE USER 'admin'@'localhost' IDENTIFIED BY '{{ user_password }}';"
+        - unless: mariadb -u root -p'{{ root_password }}' -e "SELECT User FROM mysql.user WHERE User='admin';" | grep -i "admin"
     
     create_database:
       cmd.run:
         - name: mariadb -u root -p'{{ root_password }}' -e "CREATE DATABASE IF NOT EXISTS watchlistdb"
-        - unless: mariadb -u root -p'{{ root_password }}' -e "SHOW DATABASES LIKE 'watchlistdb';"
+        - unless: mariadb -u root -p'{{ root_password }}' -e "SHOW DATABASES LIKE 'watchlistdb';" | grep -i "watchlistdb"
     
     grant_priviledges:
       cmd.run:
@@ -179,7 +181,7 @@ Seuraavaksi poistin virtuaalikoneet ja alustin ne uudestaan. Nyt virtuaalikoneet
         - name: mariadb -u admin -p'{{ user_password }}' < /home/admin/mariadb/create_table.sql
         - unless: mariadb -u admin -p'{{ user_password }}' watchlistdb -e "SHOW TABLES LIKE 'watchlist'" | grep -q 'watchlist'
 
-Tiedoston sisältö muuttui siis siten, että lisäsin admin-käyttäjän ja sekä tallensin SQL-lauseen käyttäjän hakemistoon. Lisäksi korjasin paljon väärää syntaksia.  Ajoin taas moduulin paikallisesti.
+Tiedoston sisältö muuttui siis siten, että lisäsin admin-käyttäjän ja sekä tallensin SQL-lauseen käyttäjän hakemistoon. Lisäksi korjasin paljon väärää syntaksia ja vaihdoin rootin salasanan asettamisen [tämän dokumentaation](https://mariadb.com/kb/en/set-password/#syntax) mukaisesti.  Ajoin taas moduulin paikallisesti.
 
 ![Tietokantaa ei oltu asetettu taululle](Kuvat/h5_mariadb_virhe3.png)
 
@@ -197,7 +199,107 @@ Watchlistdb-tietokanta oli ilmestynyt ja sille oli luotu taulu watchlist. Lisäk
 
 Muutoksia ei tapahtunut, joten ehdot toimivat oikein ja moduuli oli idempotentti.
 
+## phpMyAdmin
+
+Jatkoin tehtävää 11.12 tehdäkseni vielä yksinkertaisen käyttöliittymän tietokannalle. Tutkaillessani vaihtoehtoja päädyin käyttämään [phpMyAdmin](https://www.phpmyadmin.net/)-palvelua, joka luo automaattisesti käyttöliittymän MYSQL- ja MariaDB tietokannoille. Sovelsin [näitä ohjeita](https://www.digitalocean.com/community/tutorials/how-to-install-phpmyadmin-from-source-debian-10) tehtävässä. Aloitin luomalla käyttöliittymälle oman moduulin:
+
+    $ sudo mkdir -p /srv/salt/phpmyadmin/
+
+Tämän jälkeen tein moduuliin install_phpmyadmin.sls-tiedoston.
+
+    $ sudoedit /srv/salt/phpmyadmin/install_phpmyadmin.sls
+
+Tiedoston sisältö:
+
+    install_phpmyadmin:
+      pkg.installed:
+        - pkgs:
+          - phpmyadmin
+          - apache2
+          - php
+          - php-mysql
+
+Tämän jälkeen loin moduuliin init.sls tiedoston, johon lisäsin install_phpmyadmin-tiedoston suoritettavaksi. 
+
+    $ sudoedit /srv/salt/phpmyadmin/init.sls
+
+Tiedoston sisältö:
+
+    include:
+      - phpmyadmin.install_phpmyadmin
+
+Tämän jälkeen testasin paikallisesti, että tarvittavat asennukset onnistuvat.
+
+    $ sudo salt-call --local state.apply phpmyadmin
+
+Asennukset onnistuivat ja moduuli oli idempotentti. Seuraavaksi kopioin phpmyadminin konfiguraation Apachelle moduulin kansioon ja nimesin sen uudelleen.
+
+    $ sudo cp /etc/phpmyadmin/apache.conf /srv/salt/phpmyadmin/phpmyadmin.conf
+
+Tämän jälkeen aloin luomaan tilatiedostoa konfiguraation tallentamiselle hakemistoon ja käyttöönottamiseen Apachessa.
+
+    $ sudoedit /srv/salt/phpmyadmin/configure_phpmyadmin.sls
+
+Tiedoston sisältö: 
+
+    /etc/apache2/conf-available/phpmyadmin.conf:
+      file.managed:
+        - source: salt://phpmyadmin/phpmyadmin.conf
+    
+    a2enconf phpmyadmin.conf:
+      cmd.run:
+        - unless: test -L /etc/apache2/conf-enabled/phpmyadmin.conf
+    
+    apache2service:
+      service.running:
+        - name: apache2
+        - watch:
+          - file: /etc/apache2/conf-available/phpmyadmin.conf
+          - cmd: a2enconf phpmyadmin.conf
+
+Tämän jälkeen lisäsin myös luodun tilatiedoston init.sls-tiedostoon. Viimeisenä vielä testasin luotua moduulia paikallisesti.
+
+    $ sudo salt-call --local state.apply phpmyadmin
+
+![Phpmyadmin-moduulin ajo](Kuvat/h5_phpadminmoduuli.png)
+
+Ajo onnistui ensiyrittämällä ja moduuli oli idempotentti. Testasin mennä master-virtuaalikoneen IP-osoitteeseen pöytäkoneeni selaimella nähdäkseni toimiiko käyttöliittymä.
+
+![phpMyAdmin](Kuvat/h5_phpmyadmin.png)
+
+Kokeilin muutamia toimintoja, kuten lisätä, muokata sekä poistaa tietoa käyttöliittymässä. Käyttöliittymä näytti toimivan hienosti. Viimeisenä kävin vielä komentokehotteen kautta kurkkaamassa ovatko tiedot päivittyneet tietokantaan.
+
+![watchlistdb](Kuvat/h5_watchlistdb.png)
+
+Vaikka tieto näkyi hieman sekavasti komentokehotteessa, pystyi siitä päättelemään että lisätyt tiedot olivat myös oikeasti tallentuneet tietokantaan. Nyt olin tyytyväinen projektini lopputulokseen.
+
+## Moduulien ajo minionilla
+
+Loppuhuipennuksena kokeilin ajaa tekemiäni moduuleita minionilla. Ensin ajoin mariadb-moduulin.
+
+    $ sudo salt '*' state.apply mariadb
+
+![Onnistunut mariadb-moduulin ajo minionilla](Kuvat/h5_mariadb_minion.png)
+
+Ajo onnistui ja moduuli oli idempotentti. Kävin vielä tarkistamassa tietokannan.
+
+![Tietokanta minionilla](Kuvat/h5_mariadb_minion2.png)
+
+Pääsin kirjautumaan slave-virtuaalikoneella tietokantaan ja watchlistdb oli ilmestynyt. Seuraavaksi ajoin vielä phpmyadmin-moduulin.
+
+    $ sudo salt '*' state.apply phpmyadmin
+
+![Onnistunut phpmyadmin-moduulin ajo](Kuvat/h5_phpmyadmin_minion.png)
+
+Myös tämän myphpadmin-moduulin ajo onnistui ja se oli idempotentti. Viimeiseksi vielä tarkistin slave-virtuaalikoneen localhostin, että käyttöliittymä näkyy siellä. 
+
+![Käyttöliittymä minionilla](Kuvat/h5_kayttoliittyma_minionilla.png)
+
+PhpMyAdmin-käyttöliittymä näkyi myös slave-virtuaalikoneen IP-osoitteessa. Nyt siis moduulit oli testattu myös minion-tietokoneella.
+
 # Lähteet
+
+Drake, M. 16.10.2020. How To Install phpMyAdmin From Source on Debian 10. DigitalOcean. Luettavissa: [https://www.digitalocean.com/community/tutorials/how-to-install-phpmyadmin-from-source-debian-10](https://www.digitalocean.com/community/tutorials/how-to-install-phpmyadmin-from-source-debian-10). Luettu: 12.12.2024.
 
 Karvinen, T. 2018. Install MariaDB on Ubuntu 18.04 – Database Management System, the New MySQL. Tero Karvisen verkkosivusto. Luettavissa: [https://terokarvinen.com/2018/install-mariadb-on-ubuntu-18-04-database-management-system-the-new-mysql/?fromSearch=database](https://terokarvinen.com/2018/install-mariadb-on-ubuntu-18-04-database-management-system-the-new-mysql/?fromSearch=database). Luettu: 03.12.2024.
 
@@ -205,6 +307,10 @@ Karvinen, T. 28.11.2024. Opettaja. Haaga-Helia ammattikorkeakoulu. Suullinen tie
 
 MariaDB. s.a. mysqladmin. MariaDB. Luettavissa: [https://mariadb.com/kb/en/mysqladmin/](https://mariadb.com/kb/en/mysqladmin/). Luettu: 3.12.2024.
 
+MariaDB. s.a. SET PASSWORD. MariaDB. Luettavissa: [https://mariadb.com/kb/en/set-password/#syntax](https://mariadb.com/kb/en/set-password/#syntax). Luettu: 3.12.2024.
+
 Oracle. s.a. 4.5.2 mysqladmin — A MySQL Server Administration Program. MySQL. Luettavissa: [https://dev.mysql.com/doc/refman/5.7/en/mysqladmin.html](https://dev.mysql.com/doc/refman/5.7/en/mysqladmin.html). Luettu: 3.12.2024.
+
+phpMyAdmin contributors. s.a. Bringing MySQL to the web. phpMyAdmin. Luettavissa: [https://www.phpmyadmin.net/](https://www.phpmyadmin.net/). Luettu: 11.12.2024.
 
 Salt Project. s.a. Pillar Walkthrough. Salt Project. Luettavissa: [https://docs.saltproject.io/en/3006/topics/tutorials/pillar.html](https://docs.saltproject.io/en/3006/topics/tutorials/pillar.html). Luettu: 3.12.2024.
