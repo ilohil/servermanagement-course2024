@@ -142,8 +142,8 @@ Seuraavaksi poistin virtuaalikoneet ja alustin ne uudestaan. Nyt virtuaalikoneet
     
     set_root_password:
       cmd.run:
-        - name: mariadb -u root -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('{{ root_password }}')"
-        - unless: mariadb -u root -p'{{ root_password }}' -e "SELECT User FROM mysql.user WHERE User='root';" | grep -i "root"
+        - name: mariadb -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED VIA mysql_native_password USING PASSWORD('{{ root_password }}');"
+        - onlyif: mariadb -u root -e "SELECT plugin FROM mysql.user WHERE User='root';" | grep -qv 'mysql_native_password'
     
     remove_test_database:
       cmd.run:
@@ -181,7 +181,7 @@ Seuraavaksi poistin virtuaalikoneet ja alustin ne uudestaan. Nyt virtuaalikoneet
         - name: mariadb -u admin -p'{{ user_password }}' < /home/admin/mariadb/create_table.sql
         - unless: mariadb -u admin -p'{{ user_password }}' watchlistdb -e "SHOW TABLES LIKE 'watchlist'" | grep -q 'watchlist'
 
-Tiedoston sisältö muuttui siis siten, että lisäsin admin-käyttäjän ja sekä tallensin SQL-lauseen käyttäjän hakemistoon. Lisäksi korjasin paljon väärää syntaksia ja vaihdoin rootin salasanan asettamisen [tämän dokumentaation](https://mariadb.com/kb/en/set-password/#syntax) mukaisesti.  Ajoin taas moduulin paikallisesti.
+Tiedoston sisältö muuttui siis siten, että lisäsin admin-käyttäjän ja sekä tallensin SQL-lauseen käyttäjän hakemistoon. Lisäksi korjasin paljon väärää syntaksia ja vaihdoin rootin salasanan asettamisen [tämän ohjeen](https://mariadb.com/kb/en/alter-user/) mukaisesti.  Ajoin taas moduulin paikallisesti.
 
 ![Tietokantaa ei oltu asetettu taululle](Kuvat/h5_mariadb_virhe3.png)
 
@@ -307,7 +307,7 @@ Karvinen, T. 28.11.2024. Opettaja. Haaga-Helia ammattikorkeakoulu. Suullinen tie
 
 MariaDB. s.a. mysqladmin. MariaDB. Luettavissa: [https://mariadb.com/kb/en/mysqladmin/](https://mariadb.com/kb/en/mysqladmin/). Luettu: 3.12.2024.
 
-MariaDB. s.a. SET PASSWORD. MariaDB. Luettavissa: [https://mariadb.com/kb/en/set-password/#syntax](https://mariadb.com/kb/en/set-password/#syntax). Luettu: 3.12.2024.
+MariaDB. s.a. ALTER USER. MariaDB. Luettavissa: [https://mariadb.com/kb/en/alter-user/](https://mariadb.com/kb/en/alter-user/). Luettu: 3.12.2024.
 
 Oracle. s.a. 4.5.2 mysqladmin — A MySQL Server Administration Program. MySQL. Luettavissa: [https://dev.mysql.com/doc/refman/5.7/en/mysqladmin.html](https://dev.mysql.com/doc/refman/5.7/en/mysqladmin.html). Luettu: 3.12.2024.
 
